@@ -1,0 +1,97 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-localstorage/iron-localstorage.html">
+
+<!--
+`feature-toggle`
+support feature toggle content for polymer
+
+@demo demo/index.html 
+-->
+
+<dom-module id="feature-toggle">
+  <template>
+    <iron-localstorage name="feature-toggle" id="store"
+      value={{_features}}
+      on-iron-localstorage-load-empty="initFeatures"
+      on-iron-localstorage-load="loadFeatures"
+    ></iron-localstorage>
+    <template is="dom-if" if="[[_state]]" restamp="true">
+      <content></content>
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'feature-toggle',
+      
+      properties: {
+        feature: {
+          type: String
+        },
+        defaultsOn: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        invertToggle: {
+          type: Boolean,
+          value: false,
+          reflectToAttribute: true
+        },
+        _features: {
+          type: Object,
+          notify: true
+        },
+        _state: {
+          type: Boolean,
+          computed: '_toggleFeature(feature, _features, defaultsOn, invertToggle, _loaded)'
+        },
+        _loaded: {
+          type: Boolean
+        }
+      },
+
+      initFeatures: function() {
+          this._features = {};
+      },
+
+      loadFeatures: function() {
+        this._loaded = true;
+        //TODO: Change state here instead of as a computed function of property
+      },
+
+      setToggle: function(value) {
+        try {
+          this._features[this.feature] = value;
+          this.$.store.save();
+          return true;
+        } catch (ex) {
+          return false;
+        }
+      },
+
+      _tryGetToggle: function(_features, feature) {
+        try {
+          return _features[feature];
+        } catch (ex) {
+          if (ex instanceof TypeError) { 
+            console.warn("No features set in localStorage"); 
+          } else { 
+            console.error("Error occured while determining feature toggles", ex); 
+          }
+        }
+        return undefined
+      },
+
+      _toggleFeature: function(feature, _features, defaultsOn, invertToggle, _loaded) {
+        var value = this._tryGetToggle(_features, feature);
+        if (value == null) { this.setToggle(null); }
+        if (value != null && typeof(value) === "boolean") {
+          return (invertToggle ? !value : value)
+        }
+        return defaultsOn;
+      }
+
+    });
+  </script>
+</dom-module>

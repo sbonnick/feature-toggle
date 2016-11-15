@@ -1,0 +1,32 @@
+{
+  "name": "feature-toggle",
+  "version": "0.0.1",
+  "authors": [
+    "Stewart Bonnick"
+  ],
+  "description": "support feature toggle content for polymer",
+  "keywords": [
+    "web-component",
+    "polymer",
+    "feature toggle"
+  ],
+  "main": "feature-toggle.html",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sbonnick/feature-toggle.git"
+  },
+  "license": "http://polymer.github.io/LICENSE.txt",
+  "homepage": "https://github.com/sbonnick/feature-toggle",
+  "ignore": [],
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.7.0",
+    "app-storage": "polymerElements/app-storage#^0.9.7",
+    "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.6"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^4.3.6",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  }
+}
