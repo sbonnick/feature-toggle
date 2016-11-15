@@ -16,11 +16,10 @@
     "url": "git://github.com/sbonnick/feature-toggle.git"
   },
   "license": "http://polymer.github.io/LICENSE.txt",
-  "homepage": "https://github.com/sbonnick/feature-toggle",
+  "homepage": "https://github.com/sbonnick/feature-toggle/",
   "ignore": [],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.7.0",
-    "app-storage": "polymerElements/app-storage#^0.9.7",
     "iron-localstorage": "PolymerElements/iron-localstorage#^1.0.6"
   },
   "devDependencies": {
