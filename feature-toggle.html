@@ -2,15 +2,22 @@
 <link rel="import" href="../iron-localstorage/iron-localstorage.html">
 
 <!--
-`feature-toggle`
-support feature toggle content for polymer
+`feature-toggle` Adds support for feature toggles in polymer client applications.
+
+For a veriety of examples, refer to the demo page. for a basic example:
+
+    <feature-toggle feature="heading">
+        <h1>testing toggle</H1>
+    </feature-toggle>
+
+In this example, the header will only be shown if the feature *heading* is correctly set to true.
 
 @demo demo/index.html 
 -->
 
 <dom-module id="feature-toggle">
   <template>
-    <iron-localstorage name="feature-toggle" id="store"
+    <iron-localstorage name={{set}} id="store"
       value={{_features}}
       on-iron-localstorage-load-empty="initFeatures"
       on-iron-localstorage-load="loadFeatures"
@@ -25,26 +32,34 @@ support feature toggle content for polymer
       is: 'feature-toggle',
       
       properties: {
+
+        /** feature label that should determine the loading of child components */
         feature: {
           type: String
         },
+        /** the feature set which the feature belongs */
+        set: {
+          type: String,
+          value: 'standard-toggles'
+        },
+        /** if set, the default state will be on if no state has been set */
         defaultsOn: {
           type: Boolean,
           value: false,
           reflectToAttribute: true
         },
+        /** if set, the set state will be inverted */
         invertToggle: {
           type: Boolean,
           value: false,
           reflectToAttribute: true
         },
         _features: {
-          type: Object,
-          notify: true
+          type: Object
         },
         _state: {
           type: Boolean,
-          computed: '_toggleFeature(feature, _features, defaultsOn, invertToggle, _loaded)'
+          computed: '_toggleFeature(feature, _features, defaultsOn, invertToggle, _loaded, set)'
         },
         _loaded: {
           type: Boolean
@@ -53,13 +68,19 @@ support feature toggle content for polymer
 
       initFeatures: function() {
           this._features = {};
+          this._loaded = true;
       },
 
       loadFeatures: function() {
         this._loaded = true;
-        //TODO: Change state here instead of as a computed function of property
       },
 
+      /**
+      * Sets the state of the `feature`.
+      *
+      * @param {Boolean} value The value to set for the given feature.
+      * @return {Boolean} True if setting was successful.
+      */
       setToggle: function(value) {
         try {
           this._features[this.feature] = value;
@@ -83,9 +104,9 @@ support feature toggle content for polymer
         return undefined
       },
 
-      _toggleFeature: function(feature, _features, defaultsOn, invertToggle, _loaded) {
+      _toggleFeature: function(feature, _features, defaultsOn, invertToggle, _loaded, set) {
         var value = this._tryGetToggle(_features, feature);
-        if (value == null) { this.setToggle(null); }
+        // if (value == null) { this.setToggle(null); }
         if (value != null && typeof(value) === "boolean") {
           return (invertToggle ? !value : value)
         }

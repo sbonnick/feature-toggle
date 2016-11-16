@@ -13,31 +13,38 @@
     <link rel="import" href="../feature-toggle.html">
 
     <style is="custom-style" include="demo-pages-shared-styles">
+      .centered {
+        max-width: 800px;
+      }
     </style>
   </head>
   <body>
     <div class="vertical-section-container centered">
       <h3>Basic feature-toggle demo</h3>
+      <p>A basic example showing the use of a feature flag and a feature set. The heading inside the feature-toggle 
+         will only be displayed if the localStorage contains <span>"demo-toggles": {"heading": true}</span></p>
+      <demo-snippet>
+        <template>
+          <feature-toggle set="demo-toggles" feature="heading">
+            <h1>testing toggle</H1>
+          </feature-toggle>
+        </template>
+        <script></script>
+      </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+      <h3>feature-toggle with inversion</h3>
+      <p>Example changing the default behavior if no value is set for the feature</p>
       <demo-snippet>
         <template>
 
-          <feature-toggle feature="heading">
-            <h1>testing toggle</H1>
-          </feature-toggle>
-
-          <feature-toggle feature="body" defaults-on invert-toggle>
+          <feature-toggle set="demo-toggles" feature="body" defaults-on>
             <p>testing toggle in a different section</p>
           </feature-toggle>
 
         </template>
-        <script>
-          document.querySelector('template').initializeDefaultValue = function(ev) {
-            this.features = {
-              heading: true,
-              blah: false
-            }
-          }
-        </script>
+        <script></script>
       </demo-snippet>
     </div>
   </body>
