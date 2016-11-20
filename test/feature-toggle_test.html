@@ -8,23 +8,108 @@
 
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
+    <script src="../../chai-dom/chai-dom.js"></script>
 
     <link rel="import" href="../feature-toggle.html">
   </head>
   <body>
-    <test-fixture id="basic">
+
+    <test-fixture id="feature-toggle-fixture">
       <template>
-        <feature-toggle></feature-toggle>
+        <feature-toggle id="toggle-fixture" set="feature-toggle-test-data">
+          <h1>Test Content</h1>
+        </feature-toggle>
       </template>
     </test-fixture>
 
     <script>
-      suite('feature-toggle', function() {
+      suite('<feature-toggle>', function() {
+        var element;
+
+        setup(function(){
+          localStorage.setItem("feature-toggle-test-data", JSON.stringify({
+            featureThatsOn: true,
+            featureThatsOff: false,
+            featureThatsNull: null
+          }));
+          element = fixture('feature-toggle-fixture');     
+        });
+
+        teardown(function(){
+          localStorage.removeItem("feature-toggle-test-data");
+        });
+
         test('instantiating the element works', function() {
-          var element = fixture('basic');
           assert.equal(element.is, 'feature-toggle');
         });
+        
+        test('content is off by default', function(done) {
+          element.feature = 'featureThatDoesNotExist';
+          flush(function() {
+            expect(element.defaultsOn).to.equal(false);
+            expect(element).to.not.contain('h1');
+            done();
+          });
+        });
+
+        test('content is on by default', function(done) {
+          element.defaultsOn = true;
+          element.feature = 'featureThatDoesNotExist';
+          flush(function() {
+            expect(element.defaultsOn).to.equal(true);
+            expect(element).to.contain('h1');
+            done();
+          });
+        });
+
+        test('toggles are successfully retrived from localStorage', function(done) {
+          element.feature = 'featureThatsOn';
+          flush(function() {
+            expect(element._features.featureThatsOn).to.equal(true);
+            expect(element._features.featureThatsOff).to.equal(false);
+            expect(element._features.featureThatsNull).to.be.null;
+            done();
+          });
+        });
+
+        test('content is on when toggled on', function(done) {
+          element.feature = 'featureThatsOn';
+          flush(function() {
+            expect(element).to.contain('h1');
+            done();
+          });
+        });
+
+        test('content is off when toggled off', function(done) {
+          element.defaultsOn = true;
+          element.feature = 'featureThatsOff';
+          flush(function() {
+            expect(element).to.not.contain('h1');
+            done();
+          });
+        });
+
+        test('content is off when toggled on and inverted', function(done) {
+          element.defaultsOn = true;
+          element.invertToggle = true;
+          element.feature = 'featureThatsOn';
+          flush(function() {
+            expect(element).to.not.contain('h1');
+            done();
+          });
+        });
+
+        test('content is on when toggled off and inverted', function(done) {
+          element.invertToggle = true;
+          element.feature = 'featureThatsOff';
+          flush(function() {
+            expect(element).to.contain('h1');
+            done();
+          });
+        });
+        
       });
     </script>
+
   </body>
 </html>
