@@ -111,7 +111,7 @@ In this example, the header will only be shown if the feature *heading* is corre
         if (value != null && typeof(value) === "boolean") {
           return (invertToggle ? !value : value)
         }
-        return defaultsOn;
+        return (invertToggle ? !defaultsOn : defaultsOn);
       }
 
     });

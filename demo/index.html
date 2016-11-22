@@ -20,27 +20,53 @@
   </head>
   <body>
     <div class="vertical-section-container centered">
-      <h3>Basic feature-toggle demo</h3>
+      <h2>Basic feature-toggle demo</h2>
       <p>A basic example showing the use of a feature flag and a feature set. The heading inside the feature-toggle 
          will only be displayed if the localStorage contains <span>"demo-toggles": {"heading": true}</span></p>
       <demo-snippet>
         <template>
+
+          <h4>Heading #1</H4>
+          
           <feature-toggle set="demo-toggles" feature="heading">
-            <h1>testing toggle</H1>
+            <h4>Heading #2</H4>
           </feature-toggle>
+
+          <h4>Heading #3</H4>
+
         </template>
         <script></script>
       </demo-snippet>
     </div>
 
     <div class="vertical-section-container centered">
-      <h3>feature-toggle with inversion</h3>
+      <h2>feature-toggle defaulting to on</h2>
       <p>Example changing the default behavior if no value is set for the feature</p>
       <demo-snippet>
         <template>
 
           <feature-toggle set="demo-toggles" feature="body" defaults-on>
-            <p>testing toggle in a different section</p>
+            <p>testing toggle is on by default</p>
+          </feature-toggle>
+
+        </template>
+        <script></script>
+      </demo-snippet>
+    </div>
+
+    <div class="vertical-section-container centered">
+      <h2>feature-toggle used for selective rendering</h2>
+      <p>Example of feature toggle used show one set components or while hiding other ones. Ideal for adding new 
+         features to replace existing ones</p>
+      <demo-snippet>
+        <template>
+
+          <feature-toggle set="demo-toggles" feature="newStuff">
+            <p>New feature that is hidden by default</p>
+          </feature-toggle>
+
+          <feature-toggle set="demo-toggles" feature="newStuff" invert-toggle>
+            <p>Old feature that is shown by default</p>
           </feature-toggle>
 
         </template>
