@@ -1,5 +1,6 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../iron-localstorage/iron-localstorage.html">
+<link rel="import" href="toggle-content-behavior.html">
 
 <!--
 `feature-toggle` Adds support for feature toggles in polymer client applications.
@@ -30,90 +31,9 @@ In this example, the header will only be shown if the feature *heading* is corre
   <script>
     Polymer({
       is: 'feature-toggle',
-      
-      properties: {
-
-        /** feature label that should determine the loading of child components */
-        feature: {
-          type: String,
-          value: undefined
-        },
-        /** the feature set which the feature belongs */
-        set: {
-          type: String,
-          value: 'standard-toggles'
-        },
-        /** if set, the default state will be on if no state has been set */
-        defaultsOn: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-        /** if set, the set state will be inverted */
-        invertToggle: {
-          type: Boolean,
-          value: false,
-          reflectToAttribute: true
-        },
-        _features: {
-          type: Object
-        },
-        _state: {
-          type: Boolean,
-          computed: '_toggleFeature(feature, _features, defaultsOn, invertToggle, _loaded, set)'
-        },
-        _loaded: {
-          type: Boolean
-        }
-      },
-
-      initFeatures: function() {
-          this._features = {};
-          this._loaded = true;
-      },
-
-      loadFeatures: function() {
-        this._loaded = true;
-      },
-
-      /**
-      * Sets the state of the `feature`.
-      *
-      * @param {Boolean} value The value to set for the given feature.
-      * @return {Boolean} True if setting was successful.
-      */
-      setToggle: function(value) {
-        try {
-          this._features[this.feature] = value;
-          this.$.store.save();
-          return true;
-        } catch (ex) {
-          return false;
-        }
-      },
-
-      _tryGetToggle: function(_features, feature) {
-        try {
-          return _features[feature];
-        } catch (ex) {
-          if (ex instanceof TypeError) { 
-            console.warn("No features set in localStorage"); 
-          } else { 
-            console.error("Error occured while determining feature toggles", ex); 
-          }
-        }
-        return undefined
-      },
-
-      _toggleFeature: function(feature, _features, defaultsOn, invertToggle, _loaded, set) {
-        var value = this._tryGetToggle(_features, feature);
-        // if (value == null) { this.setToggle(null); }
-        if (value != null && typeof(value) === "boolean") {
-          return (invertToggle ? !value : value)
-        }
-        return (invertToggle ? !defaultsOn : defaultsOn);
-      }
-
+      behaviors: [
+        FeatureToggleBehaviors.ToggleContent
+      ]
     });
   </script>
 </dom-module>
