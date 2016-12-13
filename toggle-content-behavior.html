@@ -1,22 +1,18 @@
 <link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feature-behavior.html">
+
 <script>  
   (function() {
     'use strict';
     const FeatureToggleBehaviors = (window.FeatureToggleBehaviors = window.FeatureToggleBehaviors || {});
-
-    /** @polymerBehavior FeatureToggleBehaviors.ToggleContent */
-    FeatureToggleBehaviors.ToggleContent = {
+    
+    /**
+    * Extended behavior.
+    *
+    * @polymerBehavior FeatureToggleBehaviors.ToggleContent
+    */
+    FeatureToggleBehaviors.ToggleContentImpl = {
       properties: {
-        /** feature label that should determine the loading of child components */
-        feature: {
-          type: String,
-          value: undefined
-        },
-        /** the feature set which the feature belongs */
-        set: {
-          type: String,
-          value: 'standard-toggles'
-        },
         /** if set, the default state will be on if no state has been set */
         defaultsOn: {
           type: Boolean,
@@ -28,13 +24,6 @@
           type: Boolean,
           value: false,
           reflectToAttribute: true
-        },
-        _features: {
-          type: Object
-        },
-        _state: {
-          type: Boolean,
-          computed: '_toggleFeature(feature, _features, defaultsOn, invertToggle, _loaded, set)'
         },
         _loaded: {
           type: Boolean
@@ -48,22 +37,6 @@
 
       loadFeatures: function() {
         this._loaded = true;
-      },
-
-      /**
-      * Sets the state of the `feature`.
-      *
-      * @param {Boolean} value The value to set for the given feature.
-      * @return {Boolean} True if setting was successful.
-      */
-      setToggle: function(value) {
-        try {
-          this._features[this.feature] = value;
-          this.$.store.save();
-          return true;
-        } catch (ex) {
-          return false;
-        }
       },
 
       _tryGetToggle: function(_features, feature) {
@@ -87,5 +60,12 @@
         return (invertToggle ? !defaultsOn : defaultsOn);
       }
     }
+  
+    /** @polymerBehavior */
+    FeatureToggleBehaviors.ToggleContent = [
+      FeatureToggleBehaviors.Feature, 
+      FeatureToggleBehaviors.ToggleContentImpl
+    ]
+
   })();
 </script>

@@ -1,0 +1,43 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="feature-behavior.html">
+
+<script>  
+  (function() {
+    'use strict';
+    const FeatureToggleBehaviors = (window.FeatureToggleBehaviors = window.FeatureToggleBehaviors || {});
+    
+    /**
+    * Extended behavior.
+    *
+    * @polymerBehavior FeatureToggleBehaviors.SetFeature
+    */
+    FeatureToggleBehaviors.SetFeatureImpl = {
+      properties: {
+
+      },
+
+      /**
+      * Sets the state of the `feature`.
+      *
+      * @param {Boolean} value The value to set for the given feature.
+      * @return {Boolean} True if setting was successful.
+      */
+      setToggle: function(value) {
+        try {
+          this._features[this.feature] = value;
+          this.$.store.save();
+          return true;
+        } catch (ex) {
+          return false;
+        }
+      }
+    }
+
+    /** @polymerBehavior */
+    FeatureToggleBehaviors.SetFeature = [
+      FeatureToggleBehaviors.Feature, 
+      FeatureToggleBehaviors.SetFeatureImpl
+    ]
+    
+  })();
+</script>
